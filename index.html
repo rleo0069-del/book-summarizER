@@ -5,35 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BookSummarizer</title>
   
-  <!-- PWA Manifest (Inline) -->
+  <!-- PWA + Favicon -->
   <link rel="manifest" href="data:application/manifest+json,{
     &quot;name&quot;:&quot;BookSummarizer&quot;,
     &quot;short_name&quot;:&quot;BookSum&quot;,
-    &quot;description&quot;:&quot;Instant book summaries and recommendations&quot;,
     &quot;start_url&quot;:&quot;.&quot;,
     &quot;display&quot;:&quot;standalone&quot;,
     &quot;background_color&quot;:&quot;#18181b&quot;,
     &quot;theme_color&quot;:&quot;#f59e0b&quot;,
     &quot;icons&quot;:[{
-      &quot;src&quot;:&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f59e0b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20'/%3E%3C/svg%3E&quot;,
+      &quot;src&quot;:&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f59e0b' stroke-width='2'%3E%3Cpath d='M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20'/%3E%3C/svg%3E&quot;,
       &quot;sizes&quot;:&quot;192x192&quot;,
       &quot;type&quot;:&quot;image/svg+xml&quot;
     }]
   }">
-
-  <!-- Book Icon -->
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f59e0b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20'/%3E%3C/svg%3E" type="image/svg+xml">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f59e0b' stroke-width='2'%3E%3Cpath d='M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20'/%3E%3C/svg%3E" type="image/svg+xml">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
-<body class="min-h-screen pb-12">
+<body class="min-h-screen pb-12 bg-zinc-950">
   <div class="max-w-4xl mx-auto px-4">
     <div class="flex justify-between items-center mt-10 mb-4">
       <h1 class="text-5xl font-bold bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent flex items-center gap-3">
         📖 BookSummarizer
       </h1>
-      <div class="text-xs text-zinc-500">© L.E.O 2026</div>
+      <div class="text-xs text-zinc-500">© L.EO 2026</div>
     </div>
     <p class="text-center text-zinc-400 mb-10">Instant summaries • Smart recommendations</p>
 
@@ -41,8 +38,8 @@
       <div class="flex gap-3">
         <input id="bookInput" 
                type="text" 
-               placeholder="Enter book title (e.g. Dune, Atomic Habits, The Midnight Library)"
-               class="flex-1 bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 focus:outline-none focus:border-amber-500 text-lg placeholder-zinc-500">
+               placeholder="Enter book title (e.g. Dune, Atomic Habits, Project Hail Mary)"
+               class="flex-1 bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 focus:outline-none focus:border-amber-500 text-lg">
         <button onclick="searchBook()" 
                 class="bg-amber-500 hover:bg-amber-600 px-10 rounded-2xl font-semibold flex items-center gap-2 transition">
           <i class="fas fa-search"></i> Summarize
@@ -54,7 +51,7 @@
   </div>
 
   <footer class="text-center text-zinc-500 text-xs mt-16">
-    © L.E.O 2026 • Install as app for the best experience
+    © L.EO 2026 • Data from Open Library & Google Books
   </footer>
 
   <script>
@@ -75,7 +72,7 @@
         const data = await res.json();
 
         if (!data.docs || data.docs.length === 0) {
-          resultDiv.innerHTML = `<p class="text-red-400 text-center py-20 text-xl">Book not found 😕<br><span class="text-sm">Try a different title or spelling</span></p>`;
+          resultDiv.innerHTML = `<p class="text-red-400 text-center py-20 text-xl">Book not found 😕<br><span class="text-sm">Try a different title</span></p>`;
           return;
         }
 
@@ -83,11 +80,9 @@
         const title = book.title;
         const author = book.author_name ? book.author_name[0] : "Unknown Author";
         const coverId = book.cover_i;
-        const coverUrl = coverId 
-          ? `https://covers.openlibrary.org/b/id/${coverId}-M.jpg` 
-          : "https://via.placeholder.com/200x300/1f2937/ffffff?text=No+Cover";
+        const coverUrl = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-M.jpg` : "https://via.placeholder.com/200x300/1f2937/ffffff?text=No+Cover";
 
-        let desc = "No detailed summary available at the moment.";
+        let desc = "No detailed summary available.";
         try {
           const gres = await fetch(`https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(title)}+inauthor:${encodeURIComponent(author)}`);
           const gdata = await gres.json();
@@ -96,6 +91,9 @@
           }
         } catch(e) {}
 
+        // Barnes & Noble search link
+        const bnLink = `https://www.barnesandnoble.com/s/${encodeURIComponent(title + " " + author)}`;
+
         resultDiv.innerHTML = `
           <div class="bg-zinc-900 rounded-3xl overflow-hidden border border-zinc-800">
             <div class="flex flex-col md:flex-row gap-8 p-10">
@@ -103,9 +101,15 @@
               <div class="flex-1">
                 <h2 class="text-4xl font-bold leading-tight">${title}</h2>
                 <p class="text-amber-400 mt-2 text-2xl">by ${author}</p>
+                
                 <div class="mt-8 prose prose-invert max-w-none text-zinc-300 leading-relaxed">
                   <p>${desc}</p>
                 </div>
+
+                <a href="${bnLink}" target="_blank" 
+                   class="mt-8 inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-700 transition px-8 py-4 rounded-2xl font-semibold">
+                  <i class="fas fa-shopping-cart"></i> Buy on Barnes & Noble
+                </a>
               </div>
             </div>
             
@@ -114,15 +118,15 @@
                 <i class="fas fa-thumbs-up"></i> You might also enjoy:
               </p>
               <div class="flex flex-wrap gap-3">
-                ${book.subject ? book.subject.slice(0, 7).map(s => 
-                  `<span class="bg-zinc-800 hover:bg-zinc-700 transition px-5 py-2.5 rounded-2xl text-sm cursor-default">${s}</span>`
-                ).join('') : '<span class="text-zinc-500">No additional recommendations available</span>'}
+                ${book.subject ? book.subject.slice(0, 8).map(s => 
+                  `<span class="bg-zinc-800 px-5 py-2.5 rounded-2xl text-sm">${s}</span>`
+                ).join('') : '<span class="text-zinc-500">No genre tags available</span>'}
               </div>
             </div>
           </div>
         `;
       } catch (err) {
-        resultDiv.innerHTML = `<p class="text-red-400 text-center py-20">Something went wrong.<br>Please check your connection.</p>`;
+        resultDiv.innerHTML = `<p class="text-red-400 text-center py-20">Network error. Please try again.</p>`;
       }
     }
 
