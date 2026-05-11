@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BookSummarizer</title>
+ <title>📖 book-summarizER • Simple Book Finder</title>
   
   <!-- PWA + Favicon -->
   <link rel="manifest" href="data:application/manifest+json,{
@@ -36,10 +36,11 @@
 
     <div class="bg-zinc-900 rounded-3xl p-8 shadow-2xl">
       <div class="flex gap-3">
-        <input id="bookInput" 
-               type="text" 
-               placeholder="Enter book title (e.g. Dune, Pride and Prejudice, The Great Gatsby)"
-               class="flex-1 bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 focus:outline-none focus:border-amber-500 text-lg">
+       <input id="bookInput" 
+       type="text" 
+       placeholder="Enter book title (e.g. Dune, Pride and Prejudice, The Great Gatsby)"
+       title="Type a book title and hit Summarize or press Enter"
+       class="flex-1 bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 focus:outline-none focus:border-amber-500 text-lg">
         <button onclick="searchBook()" 
                 class="bg-amber-500 hover:bg-amber-600 px-10 rounded-2xl font-semibold flex items-center gap-2 transition">
           <i class="fas fa-search"></i> Summarize
@@ -51,8 +52,9 @@
   </div>
 
   <footer class="text-center text-zinc-500 text-xs mt-16">
-    © L.E.O 2026 • Less is more
-  </footer>
+  © L.E.O 2026 • Less is more<br>
+  Made with ❤️ by us • just simple, clean and fun
+</footer>
 
   <script>
     async function searchBook() {
