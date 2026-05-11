@@ -38,7 +38,7 @@
       <div class="flex gap-3">
         <input id="bookInput" 
                type="text" 
-               placeholder="Enter book title (e.g. Dune, Atomic Habits, Project Hail Mary)"
+               placeholder="Enter book title (e.g. Dune, Pride and Prejudice, The Great Gatsby)"
                class="flex-1 bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 focus:outline-none focus:border-amber-500 text-lg">
         <button onclick="searchBook()" 
                 class="bg-amber-500 hover:bg-amber-600 px-10 rounded-2xl font-semibold flex items-center gap-2 transition">
@@ -51,7 +51,7 @@
   </div>
 
   <footer class="text-center text-zinc-500 text-xs mt-16">
-    © L.E.O 2026 • Data from Open Library & Google Books
+    © L.E.O 2026 • Less is more
   </footer>
 
   <script>
@@ -82,7 +82,8 @@
         const coverId = book.cover_i;
         const coverUrl = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-M.jpg` : "https://via.placeholder.com/200x300/1f2937/ffffff?text=No+Cover";
 
-        let desc = "No detailed summary available.";
+        let desc = "No detailed summary available here.<br><small class='text-zinc-500'>Click the buttons below for full details.</small>";
+
         try {
           const gres = await fetch(`https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(title)}+inauthor:${encodeURIComponent(author)}`);
           const gdata = await gres.json();
@@ -91,8 +92,9 @@
           }
         } catch(e) {}
 
-        // Barnes & Noble search link
         const bnLink = `https://www.barnesandnoble.com/s/${encodeURIComponent(title + " " + author)}`;
+        const grLink = `https://www.goodreads.com/search?q=${encodeURIComponent(title + " " + author)}`;
+        const locLink = `https://www.loc.gov/search/?q=${encodeURIComponent(title + " " + author)}&fa=partof:books`;
 
         resultDiv.innerHTML = `
           <div class="bg-zinc-900 rounded-3xl overflow-hidden border border-zinc-800">
@@ -106,21 +108,20 @@
                   <p>${desc}</p>
                 </div>
 
-                <a href="${bnLink}" target="_blank" 
-                   class="mt-8 inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-700 transition px-8 py-4 rounded-2xl font-semibold">
-                  <i class="fas fa-shopping-cart"></i> Buy on Barnes & Noble
-                </a>
-              </div>
-            </div>
-            
-            <div class="border-t border-zinc-800 p-10">
-              <p class="text-amber-400 font-medium mb-4 flex items-center gap-2">
-                <i class="fas fa-thumbs-up"></i> You might also enjoy:
-              </p>
-              <div class="flex flex-wrap gap-3">
-                ${book.subject ? book.subject.slice(0, 8).map(s => 
-                  `<span class="bg-zinc-800 px-5 py-2.5 rounded-2xl text-sm">${s}</span>`
-                ).join('') : '<span class="text-zinc-500">No genre tags available</span>'}
+                <div class="mt-8 flex flex-wrap gap-4">
+                  <a href="${bnLink}" target="_blank" 
+                     class="inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-700 transition px-8 py-4 rounded-2xl font-semibold">
+                    <i class="fas fa-shopping-cart"></i> Buy on Barnes & Noble
+                  </a>
+                  <a href="${grLink}" target="_blank" 
+                     class="inline-flex items-center gap-3 bg-emerald-600 hover:bg-emerald-700 transition px-8 py-4 rounded-2xl font-semibold">
+                    <i class="fas fa-star"></i> View on Goodreads
+                  </a>
+                  <a href="${locLink}" target="_blank" 
+                     class="inline-flex items-center gap-3 bg-amber-700 hover:bg-amber-800 transition px-8 py-4 rounded-2xl font-semibold">
+                    <i class="fas fa-landmark"></i> Library of Congress
+                  </a>
+                </div>
               </div>
             </div>
           </div>
